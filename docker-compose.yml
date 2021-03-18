@@ -1,0 +1,63 @@
+version: '3'
+services:
+  front-envoy:
+    image: envoyproxy/envoy-alpine:v1.7.0
+    volumes:
+      - ./front_envoy/envoy-config.yaml:/etc/envoy-config.yaml
+    ports:
+      - "8080:80"
+      - "9901:9901"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'front-envoy' --service-node 'front-envoy' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
+
+  service-one-envoy:
+    image: envoyproxy/envoy-alpine:v1.7.0
+    volumes:
+      - ./service-one/envoy-config.yaml:/etc/envoy-config.yaml
+    ports:
+      - "9010:9010"
+      - "9210:9210"
+      - "9310:9310"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'service-one' --service-node 'service-one' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
+
+  service-one:
+    build: service-one/
+    ports:
+    - "8010:8010"
+
+  service-two_envoy:
+    image: envoyproxy/envoy-alpine:v1.7.0
+    volumes:
+      - ./service-two/envoy-config.yaml:/etc/envoy-config.yaml
+    ports:
+      - "9020:9020"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'service-two' --service-node 'service-two' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"  
+
+  service-two:
+    build: service-two/
+    ports:
+    - "8020:8020"
+
+  service-three_envoy:
+    image: envoyproxy/envoy-alpine:v1.7.0
+    volumes:
+      - ./service-three/envoy-config.yaml:/etc/envoy-config.yaml
+    ports:
+      - "9030:9030"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'service-three' --service-node 'service-three' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"  
+
+  service-three:
+    build: service-three/
+    ports:
+    - "8030:8030"  
+
+  zipkin:
+    image: jaegertracing/all-in-one
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    ports:
+      - "9411:9411"
+      - "16686:16686"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "14268:14268"
