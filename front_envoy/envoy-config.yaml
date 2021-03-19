@@ -1,10 +1,11 @@
 node:
+  id: front-envoy
   cluster: front-envoy #Este campo es el service-name en Jaeger
 
-#admin: #Acceso a la consola web de administración: metricas, etc.
-#  access_log_path: /tmp/admin_access.log
-#  address:
-#    socket_address: { address: 127.0.0.1, port_value: 9901 }
+admin: #Acceso a la consola web de administración: metricas, etc.
+  access_log_path: /tmp/admin_access.log
+  address:
+    socket_address: { address: 127.0.0.1, port_value: 9901 }
 
 static_resources:
   listeners:
@@ -51,7 +52,7 @@ static_resources:
   clusters:
     - name: service-one-cluster
       connect_timeout: 0.25s
-      type: STATIC
+      type: STRICT_DNS
       lb_policy: ROUND_ROBIN
       load_assignment:
         cluster_name: service-one-cluster
@@ -60,18 +61,18 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: 127.0.0.1 #IP del servicio backend
+                      address: service-one-envoy #IP del servicio backend
                       port_value: 9010 #Puerto del servicio backend
     - name: zipkin-cluster
       connect_timeout: 1s
-      type: STATIC
+      type: STRICT_DNS
       lb_policy: ROUND_ROBIN
       load_assignment:
-        cluster_name: zipkin
+        cluster_name: zipkin-cluster
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
-                      address: 127.0.0.1
+                      address: jaeger
                       port_value: 9411

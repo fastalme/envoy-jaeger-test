@@ -1,4 +1,5 @@
 node:
+  id: service-two-envoy
   cluster: service-two-envoy #Este campo es el service-name en Jaeger
 
 #admin: #Acceso a la consola web de administración: metricas, etc.
@@ -51,7 +52,7 @@ static_resources:
   clusters:
     - name: service-two-cluster
       connect_timeout: 0.25s
-      type: STATIC
+      type: STRICT_DNS
       lb_policy: ROUND_ROBIN
       load_assignment:
         cluster_name: service-two-cluster
@@ -60,18 +61,18 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: 127.0.0.1 #IP del servicio backend
+                      address: service-two #IP o hostname del servicio backend
                       port_value: 8020 #Puerto del servicio backend
     - name: zipkin-cluster
       connect_timeout: 1s
-      type: STATIC
+      type: STRICT_DNS
       lb_policy: ROUND_ROBIN
       load_assignment:
-        cluster_name: zipkin
+        cluster_name: zipkin-cluster
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
-                      address: 127.0.0.1
+                      address: jaeger
                       port_value: 9411

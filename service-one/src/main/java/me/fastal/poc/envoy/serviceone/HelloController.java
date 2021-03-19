@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -22,10 +21,10 @@ public class HelloController {
 
         List<String> result = new ArrayList<> ();
 
-        String hostname = "localhost";
-        //String hostname = "service-one-envoy";
-        String service2Url = "http://" + hostname + ":9210/hello";
-        String service3Url = "http://" + hostname + ":9310/hello";
+        //String hostname = "localhost";
+        String hostname = "service-one-envoy";
+        String service2Url = String.format ("http://%s:9210/hello", hostname);
+        String service3Url = String.format ("http://%s:9310/hello", hostname);
 
         ResponseEntity<String> response;
 
