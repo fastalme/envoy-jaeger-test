@@ -1,4 +1,4 @@
-# Distributed Tracing with Envoy service mesh & Jaeger
+# Distributed Tracing with Envoy service mesh & Jaeger (Spring Boot)
 Inspired in [dnivra26/envoy_distributed_tracing] repository, this is a demo project that implements exact the same idea but with Spring Boot services and the latest versions of Envoy and Jaeger at the time this repository was published. I have to do this as part of my learning path and to understand every piece of the original demo project.
 
 ## Technologies and versions
