@@ -1,6 +1,10 @@
 # Distributed Tracing with Envoy service mesh & Jaeger (Spring Boot)
 Inspired in [dnivra26/envoy_distributed_tracing] repository, this is a demo project that implements exact the same idea but with Spring Boot services and the latest versions of Envoy and Jaeger at the time this repository was published. I have to do this as part of my learning path and to understand every piece of the original demo project.
 
+Basically, this project have three [Spring Boot] services that works together simulating a very basic service architecture. It uses [Envoy] as an proxy for every service converting the entire project in a very basi service mesh. Envoy gives this deployment a way to have tracing data generated automatically with very few source code modifications (passing HTTP headers from one service to other). This generated tracing data is collected by an [Jaeger] service (using a [Zipkin] compatible endpoint) and it is also visible through its web front end. Finally, all this componentes are tied up with an Docker Compose file that put them running in a very fast way.
+
+*Disclaimer: Even when Spring Boot has its own smooth way to integrate to a Jaeger Service (with Spring Cloud Zipkin starters and Sleuth), the purpose of this example is to show how almost any service architecture can be integrated to Jaeger using Envoy proxies.*
+
 ## Technologies and versions
 
 - Spring Boot 2.4.3
@@ -37,3 +41,7 @@ This is what the output should look like:
 [dnivra26/envoy_distributed_tracing]: <https://github.com/dnivra26/envoy_distributed_tracing>
 [deployment]: <https://github.com/fastalme/envoy-jaeger-test/blob/master/deployment.png?raw=true>
 [tracing data]: <https://github.com/fastalme/envoy-jaeger-test/blob/master/tracing-data.png?raw=true>
+[envoy]: <https://www.envoyproxy.io/>
+[jaeger]: <https://www.jaegertracing.io/>
+[zipkin]: <https://zipkin.io/>
+[spring boot]: <https://spring.io/projects/spring-boot>
